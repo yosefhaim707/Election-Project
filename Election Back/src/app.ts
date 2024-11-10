@@ -3,8 +3,9 @@ import { connectToDB } from "./dal/database";
 import dotenv from 'dotenv';
 import express from 'express';
 import User, { IUser } from "./models/User";
-import userRegister from "./services/userService";
+import userRegister from "./services/userService/userRegister";
 import userRouter from "./routes/userRoute";
+import candidateRouter from "./routes/candidateRoute";
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ app.use(express.json());
 connectToDB();
 
 app.use('/users', userRouter);
+
+app.use('/candidates', candidateRouter);
 
 
 

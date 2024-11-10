@@ -1,5 +1,6 @@
-import e, { Router } from "express";
-import postUser, { loginUser } from "../controllers/userController";
+import  { Router } from "express";
+import postUser from "../controllers/userController/postUser";
+import loginUser from "../controllers/userController/loginUser";
 
 
 const router = Router();
