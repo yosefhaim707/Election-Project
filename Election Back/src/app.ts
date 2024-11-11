@@ -6,6 +6,7 @@ import User, { IUser } from "./models/User";
 import userRegister from "./services/userService/userRegister";
 import userRouter from "./routes/userRoute";
 import candidateRouter from "./routes/candidateRoute";
+import voteRouter from "./routes/voteRoute";
 
 dotenv.config();
 
@@ -22,6 +23,8 @@ connectToDB();
 app.use('/users', userRouter);
 
 app.use('/candidates', candidateRouter);
+
+app.use('/vote', voteRouter);
 
 
 

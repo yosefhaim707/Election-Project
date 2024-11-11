@@ -4,7 +4,7 @@ import candidateAll from "../../services/candidateService/candidateAll";
 
 
 
-const getCandidates = async (req: Request, res: Response) => {
+const getCandidates = async (req: Request, res: Response): Promise<void> => {
     try {
         const candidates: ICandidate[] = await candidateAll();
         if (!candidates) {
