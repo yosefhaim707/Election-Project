@@ -1,20 +1,29 @@
 import { Schema } from "mongoose";
-import voteDTO from "../../DTO/voteDTO";
 import Candidate, { ICandidate } from "../../models/Candidate";
 import User, { IUser } from "../../models/User";
 
 
 
-const initVoteService = async (voteDTO: voteDTO): Promise<void> => {
+const initVoteService = async (username: string, candidateName: string): Promise<void> => {
     try {
-        if (!voteDTO) {
+        if (!username || !candidateName) {
             throw new Error('Data is missing');
         };
         
-        const selectedUser: IUser | null = await User.findById(voteDTO.userId);
-        const selectedCandidate: ICandidate | null = await Candidate.findById(voteDTO.candidateId);
+        const selectedUser: IUser | null = await User.findOne({ username });
+        const selectedCandidate: ICandidate | null = await Candidate.findOne({ name: candidateName });
         if (!selectedUser || !selectedCandidate) {
             throw new Error('User or candidate not found');
+        };
+        if (selectedUser.hasVoted) {
+            console.log(selectedUser.votedFor, selectedCandidate._id);
+            
+            
+            if ((selectedUser.votedFor as Schema.Types.ObjectId).toString() === (selectedCandidate._id as Schema.Types.ObjectId).toString()) {
+                throw new Error('User has already voted for this candidate');
+            } else {
+                await Candidate.findByIdAndUpdate(selectedUser.votedFor, { $inc: { votes: -1} })
+            };
         };
 
         selectedCandidate.votes++;
@@ -27,6 +36,7 @@ const initVoteService = async (voteDTO: voteDTO): Promise<void> => {
 
     } catch (error) {
         throw (error instanceof Error ? error : new Error('An error has occurred'));
+
     }
 };
 
